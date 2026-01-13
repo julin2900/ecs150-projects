@@ -1,0 +1,1 @@
+Extend your `wcat` implementation to support an optional `-n` flag that prepends line numbers to each line of output, matching the behavior of standard Unix `cat -n`. When `-n` is enabled, each line must be prefixed with a right-aligned line number followed by a tab character, with line numbers starting at 1 and continuing sequentially across all files.

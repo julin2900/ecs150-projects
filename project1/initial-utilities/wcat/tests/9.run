@@ -1,0 +1,1 @@
+./wcat -n tests/9.in.a tests/9.in.b

@@ -20,8 +20,8 @@ run_test () {
 	echo -n "test:      "
 	cat $testfile
     fi
-    eval $(cat $testfile) > tests-out/$testnum.out 2> tests-out/$testnum.err
-    echo $? > tests-out/$testnum.rc
+    eval $(cat $testfile) > $testdir/tests-out/$testnum.out 2> $testdir/tests-out/$testnum.err
+    echo $? > $testdir/tests-out/$testnum.rc
 
     # post: execute this after the test is done, to clean up
     local postfile=$testdir/$testnum.post
@@ -41,9 +41,9 @@ print_error_message () {
     local filetype=$3
     builtin echo -e "\e[31mtest $testnum: $filetype incorrect\e[0m"
     echo "  what results should be found in file: $testdir/$testnum.$filetype"
-    echo "  what results produced by your program: tests-out/$testnum.$filetype"
+    echo "  what results produced by your program: $testdir/tests-out/$testnum.$filetype"
     echo "  compare the two using diff, cmp, or related tools to debug, e.g.:"
-    echo "  prompt> diff $testdir/$testnum.$filetype tests-out/$testnum.$filetype"
+    echo "  prompt> diff $testdir/$testnum.$filetype $testdir/tests-out/$testnum.$filetype"
     if (( $contrunning == 0 )); then
 	exit 1
     fi
@@ -57,7 +57,7 @@ check_test () {
     local filetype=$4
 
     # option to use cmp instead?
-    returnval=$(diff $testdir/$testnum.$filetype tests-out/$testnum.$filetype)
+    returnval=$(diff $testdir/$testnum.$filetype $testdir/tests-out/$testnum.$filetype)
     if (( $? == 0 )); then
 	echo 0
     else
@@ -175,9 +175,9 @@ for i; do
     esac
 done
 
-# need a test directory; must be named "tests-out"
-if [[ ! -d tests-out ]]; then
-    mkdir tests-out
+# need a test output directory inside testdir
+if [[ ! -d $testdir/tests-out ]]; then
+    mkdir $testdir/tests-out
 fi
 
 # do a one-time setup step
